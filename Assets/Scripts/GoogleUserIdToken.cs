@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,12 +9,12 @@ using System;
 
 public class GoogleUserIdToken : MonoBehaviour
 {
-    public Button serverButton; // ·ÎÄÃ ¼­¹ö ¿¬°á È®ÀÎ ¹öÆ°
-    public Button authButton;   // ±ÇÇÑ È®ÀÎ ¹öÆ°
-    public TextMeshProUGUI responseText; // ¼­¹ö ÀÀ´ä ÅØ½ºÆ®
+    public Button serverButton; // ë¡œì»¬ ì„œë²„ ì—°ê²° í™•ì¸ ë²„íŠ¼
+    public Button authButton;   // ê¶Œí•œ í™•ì¸ ë²„íŠ¼
+    public TextMeshProUGUI responseText; // ì„œë²„ ì‘ë‹µ í…ìŠ¤íŠ¸
     public GoogleUser user;
 
-    private string serverUrl = "http://172.30.1.29:38080/"; // ·ÎÄÃ ¼­¹ö ÁÖ¼Ò
+    private string serverUrl = "http://172.30.1.29:38080/"; // ë¡œì»¬ ì„œë²„ ì£¼ì†Œ
     
     void Start()
     {
@@ -22,7 +22,7 @@ public class GoogleUserIdToken : MonoBehaviour
         serverButton.onClick.AddListener(() => StartCoroutine(CoCheckServer()));
     }
 
-    IEnumerator CoCheckAuth() // À¯Àú Á¤º¸ Àü¼Û
+    IEnumerator CoCheckAuth() // ìœ ì € ì •ë³´ ì „ì†¡
     {
         string auth = "auth";
 
@@ -46,7 +46,7 @@ public class GoogleUserIdToken : MonoBehaviour
         }
     }
 
-    IEnumerator CoCheckServer() // Å×½ºÆ®
+    IEnumerator CoCheckServer() // í…ŒìŠ¤íŠ¸
     {
         string hello = "hello";
         UnityWebRequest request = UnityWebRequest.Get (serverUrl + hello);

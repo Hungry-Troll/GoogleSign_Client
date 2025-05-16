@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using Google;
 using System.Collections;
 using UnityEngine.UI;
@@ -6,25 +6,26 @@ using TMPro;
 
 public class GoogleSignInExample : MonoBehaviour
 {
-    // GoogleSignInResult °´Ã¼¸¦ ÀúÀåÇÒ º¯¼ö
+    // GoogleSignInResult ê°ì²´ë¥¼ ì €ì¥í•  ë³€ìˆ˜
     private GoogleSignInUser googleUser;
-    // Google ·Î±×ÀÎ »óÅÂ Ç¥½ÃÇÒ UI ÅØ½ºÆ®
+    // Google ë¡œê·¸ì¸ ìƒíƒœ í‘œì‹œí•  UI í…ìŠ¤íŠ¸
     public TextMeshProUGUI statusText;
     public TextMeshProUGUI tokenText;
     public TextMeshProUGUI emailText;
     //
     public GoogleUserIdToken googleUserIdToken;
     //
-    private string webClientId = "107667134898-spf0o52a36cucclglo4dinnp0p4190nb.apps.googleusercontent.com"; //À¥
+    private string webClientId = "107667134898-spf0o52a36cucclglo4dinnp0p4190nb.apps.googleusercontent.com"; //ì›¹í´ë¼ì´ì–¸íŠ¸ ID(Android)
+    private string iosClientId = "107667134898-uvbihhun7u4tompu2jlltmiiid1iknoe.apps.googleusercontent.com"; // IOSìš© í´ë¼ì´ì–¸íŠ¸ ID
     //
     public Button loginButton;
     public Button logoutButton;
     void Start()
     {
-        // GoogleSignIn SDK ÃÊ±âÈ­
+        // GoogleSignIn SDK ì´ˆê¸°í™”
         GoogleSignIn.Configuration = new GoogleSignInConfiguration
         {
-            WebClientId = webClientId,
+            WebClientId = GetPlatformClientId(),
             RequestIdToken = true,
             RequestEmail = true
         };
@@ -33,58 +34,69 @@ public class GoogleSignInExample : MonoBehaviour
         logoutButton.onClick.AddListener(SignOutFromGoogle);
     }
 
-    // ±¸±Û ·Î±×ÀÎ ½ÇÇà
+    private string GetPlatformClientId()
+    {
+#if UNITY_ANDROID
+        return webClientId;
+#elif UNITY_IOS
+    return iosClientId;
+#else
+    return null;
+#endif
+    }
+
+    // êµ¬ê¸€ ë¡œê·¸ì¸ ì‹¤í–‰
     public void SignInWithGoogle()
     {
-        // Google ·Î±×ÀÎ
+        // Google ë¡œê·¸ì¸
         GoogleSignIn.DefaultInstance.SignIn().ContinueWith(task =>
         {
             if (task.IsCanceled)
             {
-                Debug.Log("Google ·Î±×ÀÎ Ãë¼ÒµÊ.");
-                statusText.text = "·Î±×ÀÎ Ãë¼ÒµÊ.";
+                Debug.Log("Google ë¡œê·¸ì¸ ì·¨ì†Œë¨.");
+                statusText.text = "ë¡œê·¸ì¸ ì·¨ì†Œë¨.";
                 return;
             }
 
             if (task.IsFaulted)
             {
-                Debug.LogError("Google ·Î±×ÀÎ ½ÇÆĞ: " + task.Exception);
+                Debug.LogError("Google ë¡œê·¸ì¸ ì‹¤íŒ¨: " + task.Exception);
                 statusText.text = task.Exception.Flatten().InnerExceptions[0].Message;
                 return;
             }
 
-            // ·Î±×ÀÎ ¼º°ø ½Ã
+            // ë¡œê·¸ì¸ ì„±ê³µ ì‹œ
             googleUser = task.Result;
-            statusText.text = "·Î±×ÀÎ ¼º°ø: " + googleUser.DisplayName;
-            tokenText.text = "ID ÅäÅ« " + googleUser.IdToken.ToString();
-            emailText.text = "ÀÌ¸ŞÀÏ: " + googleUser.Email.ToString();
-            Debug.Log("Google ·Î±×ÀÎ ¼º°ø: " + googleUser.DisplayName);
-            Debug.Log("ÀÌ¸ŞÀÏ: " + googleUser.Email);
-            Debug.Log("ID ÅäÅ« " + googleUser.IdToken);
+            statusText.text = "ë¡œê·¸ì¸ ì„±ê³µ: " + googleUser.DisplayName;
+            tokenText.text = "ID í† í° " + googleUser.IdToken.ToString();
+            emailText.text = "ì´ë©”ì¼: " + googleUser.Email.ToString();
+            Debug.Log("Google ë¡œê·¸ì¸ ì„±ê³µ: " + googleUser.DisplayName);
+            Debug.Log("ì´ë©”ì¼: " + googleUser.Email);
+            Debug.Log("ID í† í° " + googleUser.IdToken);
 
-            // À¯Àú Á¤º¸ »ı¼º
+            // ìœ ì € ì •ë³´ ìƒì„±
             GoogleUser user = new GoogleUser();
             user.token = googleUser.IdToken.ToString();
             user.name = googleUser.IdToken.ToString();
-            googleUserIdToken.user = user; // À¯Àú Á¤º¸ Àü¼Û
+            googleUserIdToken.user = user; // ìœ ì € ì •ë³´ ì „ì†¡
         });
     }
 
-    // ·Î±×¾Æ¿ô Ã³¸®
+    // ë¡œê·¸ì•„ì›ƒ ì²˜ë¦¬
     public void SignOutFromGoogle()
     {
         try
         {
             GoogleSignIn.DefaultInstance.SignOut();
-            Debug.Log("Google ·Î±×¾Æ¿ô ¼º°ø.");
-            statusText.text = "·Î±×¾Æ¿ô ¼º°ø.";
+            Debug.Log("Google ë¡œê·¸ì•„ì›ƒ ì„±ê³µ.");
+            statusText.text = "ë¡œê·¸ì•„ì›ƒ ì„±ê³µ.";
             tokenText.text = "";
             emailText.text = "";
         }
         catch (System.Exception e)
         {
-            Debug.LogError("Google ·Î±×¾Æ¿ô ½ÇÆĞ: " + e.Message);
-            statusText.text = "·Î±×¾Æ¿ô ½ÇÆĞ.";
+            Debug.LogError("Google ë¡œê·¸ì•„ì›ƒ ì‹¤íŒ¨: " + e.Message);
+            statusText.text = "ë¡œê·¸ì•„ì›ƒ ì‹¤íŒ¨.";
         }
     }
 }
