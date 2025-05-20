@@ -1,12 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Google;
-using System.Collections;
 using UnityEngine.UI;
 using TMPro;
 
 public class GoogleSignInExample : MonoBehaviour
 {
-
     // GoogleSignInResult 객체를 저장할 변수
     private GoogleSignInUser googleUser;
     // Google 로그인 상태 표시할 UI 텍스트
